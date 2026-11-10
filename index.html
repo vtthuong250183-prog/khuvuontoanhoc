@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bé Vui Học Toán - Khu Vườn Thực Vật 🌿</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts: Be Vietnam Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        
+        .bounce-anim {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-5%); }
+            50% { transform: translateY(5%); }
+        }
+
+        .pulse-btn {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hiệu ứng rung khi chọn sai */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Custom scrollbar xanh thực vật */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e8f5e9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4caf50;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-emerald-200 via-green-100 to-lime-200 min-h-screen flex flex-col justify-between overflow-x-hidden text-slate-800">
+
+    <!-- HEADER / BAR TRÊN CÙNG -->
+    <header class="bg-white/90 backdrop-blur-md border-b-4 border-emerald-500 p-3 shadow-md sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showMainMenu()">
+                <div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-2xl shadow-inner border-2 border-white">
+                    🌱
+                </div>
+                <div>
+                    <h1 class="font-black text-xl md:text-2xl text-emerald-700 leading-tight">KHU VƯỜN TOÁN HỌC</h1>
+                    <p class="text-xs font-semibold text-lime-700">So sánh hoa quả & thực vật (1-4)</p>
+                </div>
+            </div>
+
+            <!-- Thanh điểm số & Âm thanh -->
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-100 border-2 border-amber-400 rounded-2xl px-3 py-1 flex items-center gap-2 shadow-sm">
+                    <span class="text-2xl">⭐</span>
+                    <span id="star-count" class="font-extrabold text-amber-600 text-xl">0</span>
+                </div>
+                <button onclick="toggleSound()" id="sound-btn" class="w-10 h-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full flex items-center justify-center shadow-md transition transform active:scale-95">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTAINER CHÍNH -->
+    <main class="max-w-4xl mx-auto w-full p-4 flex-grow flex flex-col justify-center items-center">
+
+        <!-- SCREEN 1: MAIN MENU -->
+        <section id="menu-screen" class="w-full max-w-2xl text-center my-auto">
+            <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 mb-6 shadow-xl border-4 border-emerald-300">
+                <div class="text-5xl mb-2 bounce-anim">🌻🍎🥕</div>
+                <h2 id="welcome-msg" class="text-xl sm:text-2xl font-black text-emerald-800 leading-relaxed">
+                    Chào mừng các con đến với lớp học cùng bé chinh phục những con số 🌟
+                </h2>
+                <p class="text-xs sm:text-sm text-green-600 font-semibold mt-1">Cùng khám phá thế giới thực vật tươi đẹp!</p>
+                <button onclick="speakWelcome()" class="mt-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold px-4 py-2 rounded-full text-sm inline-flex items-center gap-2 transition">
+                    <i class="fas fa-volume-up"></i> Nghe lời chào
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Nút Bài Học -->
+                <button onclick="showLessonScreen()" class="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 border-b-8 border-amber-800 text-white rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center gap-3 transform transition active:scale-95 group">
+                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center text-6xl group-hover:scale-110 transition">
+                        📖
+                    </div>
+                    <span class="text-3xl font-black drop-shadow-md">BÀI HỌC</span>
+                    <span class="text-sm font-semibold text-amber-100 bg-amber-900/30 px-3 py-1 rounded-full">Học đếm & so sánh 1-4</span>
+                </button>
+
+                <!-- Nút Trò Chơi -->
+                <button onclick="showGameMenuScreen()" class="bg-gradient-to-b from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 border-b-8 border-green-800 text-white rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center gap-3 transform transition active:scale-95 group">
+                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center text-6xl group-hover:scale-110 transition">
+                        🍓
+                    </div>
+                    <span class="text-3xl font-black drop-shadow-md">TRÒ CHƠI</span>
+                    <span class="text-sm font-semibold text-green-100 bg-green-900/30 px-3 py-1 rounded-full">8 Trò chơi khu vườn</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: PHẦN BÀI HỌC -->
+        <section id="lesson-screen" class="hidden w-full bg-white/95 rounded-3xl p-6 shadow-2xl border-4 border-emerald-400 flex flex-col">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-emerald-100">
+                <button onclick="showMainMenu()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Trang chủ
+                </button>
+                <span class="font-extrabold text-emerald-700 text-lg" id="lesson-title">Bài học</span>
+                <button onclick="readLessonText()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-2 rounded-xl text-sm flex items-center gap-1">
+                    <i class="fas fa-volume-up"></i> Đọc
+                </button>
+            </div>
+
+            <!-- Khung nội dung bài học -->
+            <div id="lesson-content" class="min-h-[300px] flex flex-col items-center justify-center my-auto p-4 text-center">
+                <!-- Nội dung render bằng JS -->
+            </div>
+
+            <!-- Điều hướng Bài học -->
+            <div class="flex justify-between items-center mt-6 pt-4 border-t-2 border-emerald-100">
+                <button id="prev-lesson-btn" onclick="changeLesson(-1)" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-5 py-3 rounded-2xl shadow border-b-4 border-amber-700 disabled:opacity-50">
+                    ⬅ Bài trước
+                </button>
+                <div id="lesson-dots" class="flex gap-2"></div>
+                <button id="next-lesson-btn" onclick="changeLesson(1)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-2xl shadow border-b-4 border-emerald-800">
+                    Bài tiếp ➡
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: MENU TRÒ CHƠI -->
+        <section id="game-menu-screen" class="hidden w-full">
+            <div class="flex justify-between items-center mb-4 bg-white/90 p-4 rounded-2xl backdrop-blur-md border-2 border-emerald-300">
+                <button onclick="showMainMenu()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Trang chủ
+                </button>
+                <h2 class="text-xl font-black text-emerald-800">TRÒ CHƠI KHU VƯỜN 🧺</h2>
+                <button onclick="showCertificate()" id="cert-shortcut-btn" class="hidden bg-yellow-400 hover:bg-yellow-500 text-amber-900 font-bold px-3 py-2 rounded-xl text-xs flex items-center gap-1 shadow">
+                    🏆 Giấy khen
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Game 1 -->
+                <button onclick="startGame(1)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-emerald-300 hover:border-emerald-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🍎</span>
+                    <span class="font-extrabold text-emerald-800 text-sm mb-1">1. Vườn quả NHIỀU HƠN</span>
+                    <span class="text-xs text-gray-500">Chọn nhóm hoa quả lớn hơn</span>
+                </button>
+
+                <!-- Game 2 -->
+                <button onclick="startGame(2)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-lime-300 hover:border-lime-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🍓</span>
+                    <span class="font-extrabold text-lime-800 text-sm mb-1">2. Vườn quả ÍT HƠN</span>
+                    <span class="text-xs text-gray-500">Tìm nhóm quả có số lượng nhỏ hơn</span>
+                </button>
+
+                <!-- Game 3 -->
+                <button onclick="startGame(3)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-purple-300 hover:border-purple-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🌻</span>
+                    <span class="font-extrabold text-purple-700 text-sm mb-1">3. Hai vườn BẰNG NHAU</span>
+                    <span class="text-xs text-gray-500">Tìm 2 luống hoa số lượng bằng nhau</span>
+                </button>
+
+                <!-- Game 4 -->
+                <button onclick="startGame(4)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-pink-300 hover:border-pink-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🌱</span>
+                    <span class="font-extrabold text-pink-700 text-sm mb-1">4. Trồng cây BẰNG NHAU</span>
+                    <span class="text-xs text-gray-500">Trồng thêm cây cho bằng luống mẫu</span>
+                </button>
+
+                <!-- Game 5 -->
+                <button onclick="startGame(5)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-amber-300 hover:border-amber-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🧺</span>
+                    <span class="font-extrabold text-amber-700 text-sm mb-1">5. Hái thêm hoặc bớt quả</span>
+                    <span class="text-xs text-gray-500">Thêm / Bớt quả trong rỏ</span>
+                </button>
+
+                <!-- Game 6 -->
+                <button onclick="startGame(6)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-teal-300 hover:border-teal-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🥕</span>
+                    <span class="font-extrabold text-teal-800 text-sm mb-1">6. Đếm củ quả (1-4)</span>
+                    <span class="text-xs text-gray-500">Đếm số rau củ trong vườn</span>
+                </button>
+
+                <!-- Game 7 -->
+                <button onclick="startGame(7)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-sky-300 hover:border-sky-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🏷️</span>
+                    <span class="font-extrabold text-sky-700 text-sm mb-1">7. Nối biển so sánh</span>
+                    <span class="text-xs text-gray-500">Gắn biển: Nhiều hơn - Ít hơn - Bằng nhau</span>
+                </button>
+
+                <!-- Game 8 -->
+                <button onclick="startGame(8)" class="bg-white rounded-2xl p-4 shadow-lg border-2 border-rose-300 hover:border-rose-500 flex flex-col items-center text-center transition group hover:-translate-y-1">
+                    <span class="text-4xl mb-2 group-hover:scale-110 transition">🎡</span>
+                    <span class="font-extrabold text-rose-700 text-sm mb-1">8. Vòng quay thực vật</span>
+                    <span class="text-xs text-gray-500">Quay thưởng & thử thách thu hoạch</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: MÀN CHƠI TƯƠNG TÁC -->
+        <section id="game-play-screen" class="hidden w-full bg-white/95 rounded-3xl p-4 sm:p-6 shadow-2xl border-4 border-emerald-400 flex flex-col min-h-[450px]">
+            <!-- Header Game -->
+            <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-emerald-100">
+                <button onclick="showGameMenuScreen()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-3 py-1.5 rounded-xl text-sm">
+                    <i class="fas fa-arrow-left"></i> Chọn trò chơi
+                </button>
+                <div id="game-title" class="font-extrabold text-emerald-800 text-base sm:text-lg">Tên Trò Chơi</div>
+                <div class="text-amber-500 font-black text-sm sm:text-base flex items-center gap-1">
+                    ⭐ <span id="game-score">0</span>
+                </div>
+            </div>
+
+            <!-- Đề bài -->
+            <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-3 mb-4 text-center flex items-center justify-center gap-2">
+                <p id="game-instruction" class="text-base sm:text-lg font-extrabold text-emerald-900">Đề bài...</p>
+                <button onclick="speakInstruction()" class="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                    <i class="fas fa-volume-up text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Bàn chơi game -->
+            <div id="game-board" class="flex-grow flex flex-col items-center justify-center p-2 relative">
+                <!-- Content JS -->
+            </div>
+
+            <!-- Footer Game -->
+            <div class="mt-4 pt-3 border-t-2 border-emerald-100 flex justify-between items-center">
+                <button onclick="resetCurrentGame()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-1">
+                    <i class="fas fa-sync-alt"></i> Chơi lại
+                </button>
+                <button id="next-game-btn" onclick="nextGame()" class="bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow hover:opacity-90">
+                    Trò chơi tiếp ➡
+                </button>
+            </div>
+        </section>
+
+        <!-- MODAL PHẦN THƯỞNG -->
+        <div id="reward-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center border-4 border-yellow-400 shadow-2xl">
+                <div id="modal-icon" class="text-6xl mb-2">🌿🌟</div>
+                <h3 id="modal-title" class="text-2xl font-black text-amber-500 mb-2">Giỏi lắm!</h3>
+                <p id="modal-msg" class="text-gray-600 font-bold mb-6">Con rất xuất sắc!</p>
+                <button onclick="closeModal()" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-extrabold text-xl py-3 rounded-2xl shadow-lg border-b-4 border-amber-700 active:scale-95">
+                    Tiếp tục 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- CERTIFICATE SCREEN (GIẤY KHEN KHU VƯỜN) -->
+        <section id="cert-screen" class="hidden w-full max-w-2xl bg-amber-50 p-6 sm:p-10 rounded-3xl border-8 border-yellow-400 shadow-2xl text-center relative overflow-hidden my-auto">
+            <!-- Trang trí góc hoa lá -->
+            <div class="absolute top-2 left-2 text-3xl">🌸</div>
+            <div class="absolute top-2 right-2 text-3xl">🌸</div>
+            <div class="absolute bottom-2 left-2 text-3xl">🌱</div>
+            <div class="absolute bottom-2 right-2 text-3xl">🌱</div>
+
+            <div class="border-4 border-dashed border-emerald-300 p-6 rounded-2xl bg-white/90">
+                <div class="text-5xl mb-2">🏆🌻</div>
+                <h2 class="text-2xl sm:text-4xl font-black text-emerald-700 uppercase tracking-wide mb-1">GIẤY KHEN KHU VƯỜN</h2>
+                <p class="text-emerald-900 font-bold text-sm sm:text-base mb-4">Lớp học chinh phục những con số thực vật</p>
+                
+                <p class="text-gray-600 text-sm mb-2">Tuyên dương nhà làm vườn tí hon:</p>
+                <h3 class="text-2xl sm:text-3xl font-black text-amber-600 mb-4 underline decoration-wavy decoration-emerald-400">
+                    BÉ GIỎI CHĂM NGOAN
+                </h3>
+                
+                <p class="text-base sm:text-lg font-bold text-emerald-800 mb-6">
+                    Đã xuất sắc hoàn thành danh hiệu:<br>
+                    <span class="text-xl sm:text-2xl text-amber-500 font-extrabold">"BÉ GIỎI SO SÁNH TRONG PHẠM VI 4"</span> 🎓
+                </p>
+
+                <div class="flex justify-around items-center mt-6 pt-4 border-t-2 border-emerald-200">
+                    <div>
+                        <p class="text-xs text-gray-500">Tổng sao thu hoạch</p>
+                        <p class="text-2xl font-black text-amber-500" id="cert-stars">⭐ 8</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex gap-4 justify-center">
+                <button onclick="showGameMenuScreen()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-2xl shadow">
+                    Quay lại trò chơi
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center p-3 text-xs text-slate-600 font-medium">
+        Lớp học cùng bé chinh phục những con số • Chủ đề Thực vật 🌸🍎🥦
+    </footer>
+
+    <!-- LOGIC TRÒ CHƠI JAVASCRIPT -->
+    <script>
+        // --- TRẠNG THÁI ỨNG DỤNG ---
+        let totalStars = 0;
+        let soundEnabled = true;
+        let currentLessonIndex = 0;
+        let currentGameId = 1;
+        let completedGames = new Set();
+
+        const welcomeText = "Chào mừng các con đến với lớp học cùng bé chinh phục những con số";
+
+        // Tự động đọc lời chào
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                speakWelcome();
+            }, 600);
+        });
+
+        function speakWelcome() {
+            speak(welcomeText);
+        }
+
+        // Danh sách Icon thực vật phong phú
+        const plantItems = [
+            { icon: '🍎', name: 'quả táo' },
+            { icon: '🍓', name: 'quả dâu tây' },
+            { icon: '🥕', name: 'củ cà rốt' },
+            { icon: '🥦', name: 'bông cải xanh' },
+            { icon: '🌽', name: 'bắp ngô' },
+            { icon: '🌻', name: 'hoa hướng dương' },
+            { icon: '🌸', name: 'hoa đào' },
+            { icon: '🍄', name: 'nấm rơm' },
+            { icon: '🍉', name: 'dưa hấu' },
+            { icon: '🍇', name: 'chùm nho' },
+            { icon: '🥑', name: 'quả bơ' },
+            { icon: '🍍', name: 'quả dứa' }
+        ];
+
+        function getRandomPlant() {
+            return plantItems[Math.floor(Math.random() * plantItems.length)];
+        }
+
+        // --- BÀI HỌC DỮ LIỆU CHỦ ĐỀ THỰC VẬT ---
+        const lessons = [
+            {
+                title: "1. Đếm hoa quả từ 1 đến 4",
+                readText: "Hãy cùng đếm các quả táo chín đỏ trong vườn từ 1 đến 4 nhé! Một, Hai, Ba, Bốn!",
+                render: () => `
+                    <div class="text-center">
+                        <p class="text-xl font-bold text-emerald-900 mb-6">Bé hãy đếm số lượng quả táo trong vườn nhé!</p>
+                        <div class="flex flex-wrap justify-center gap-4 mb-6">
+                            <div class="bg-emerald-50 p-4 rounded-2xl text-center border-2 border-emerald-300 shadow">
+                                <div class="text-5xl mb-2">🍎</div>
+                                <span class="bg-emerald-600 text-white font-black text-xl px-3 py-1 rounded-full">1 Quả</span>
+                            </div>
+                            <div class="bg-emerald-50 p-4 rounded-2xl text-center border-2 border-emerald-300 shadow">
+                                <div class="text-5xl mb-2">🍎 🍎</div>
+                                <span class="bg-emerald-600 text-white font-black text-xl px-3 py-1 rounded-full">2 Quả</span>
+                            </div>
+                            <div class="bg-emerald-50 p-4 rounded-2xl text-center border-2 border-emerald-300 shadow">
+                                <div class="text-5xl mb-2">🍎 🍎 🍎</div>
+                                <span class="bg-emerald-600 text-white font-black text-xl px-3 py-1 rounded-full">3 Quả</span>
+                            </div>
+                            <div class="bg-emerald-50 p-4 rounded-2xl text-center border-2 border-emerald-300 shadow">
+                                <div class="text-5xl mb-2">🍎 🍎 🍎 🍎</div>
+                                <span class="bg-emerald-600 text-white font-black text-xl px-3 py-1 rounded-full">4 Quả</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "2. Nhận biết luống hoa NHIỀU HƠN",
+                readText: "Luống hoa có 4 bông hoa hướng dương nhiều hơn luống hoa có 2 bông hoa.",
+                render: () => `
+                    <div class="w-full">
+                        <p class="text-xl font-bold text-emerald-900 mb-6">So sánh nhóm hoa có số lượng NHIỀU HƠN</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-amber-50 border-4 border-amber-400 p-4 rounded-3xl text-center relative shadow-lg">
+                                <span class="absolute -top-3 right-4 bg-amber-500 text-white text-xs font-black px-3 py-1 rounded-full">NHIỀU HƠN</span>
+                                <div class="text-5xl my-4">🌻 🌻 🌻 🌻</div>
+                                <p class="font-extrabold text-amber-700 text-xl">4 Bông hoa</p>
+                            </div>
+                            <div class="bg-gray-50 border-2 border-gray-300 p-4 rounded-3xl text-center opacity-70">
+                                <div class="text-5xl my-4">🌻 🌻</div>
+                                <p class="font-bold text-gray-600 text-xl">2 Bông hoa</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "3. Nhận biết rỏ quả ÍT HƠN",
+                readText: "Rỏ có 1 quả dâu tây ít hơn rỏ có 3 quả dâu tây.",
+                render: () => `
+                    <div class="w-full">
+                        <p class="text-xl font-bold text-emerald-900 mb-6">So sánh nhóm quả có số lượng ÍT HƠN</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-rose-50 border-4 border-rose-400 p-4 rounded-3xl text-center relative shadow-lg">
+                                <span class="absolute -top-3 right-4 bg-rose-500 text-white text-xs font-black px-3 py-1 rounded-full">ÍT HƠN</span>
+                                <div class="text-5xl my-4">🍓</div>
+                                <p class="font-extrabold text-rose-700 text-xl">1 Quả dâu</p>
+                            </div>
+                            <div class="bg-gray-50 border-2 border-gray-300 p-4 rounded-3xl text-center opacity-70">
+                                <div class="text-5xl my-4">🍓 🍓 🍓</div>
+                                <p class="font-bold text-gray-600 text-xl">3 Quả dâu</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "4. Nhận biết HAI VƯỜN BẰNG NHAU",
+                readText: "Hai luống rau có cùng 3 củ cà rốt. Hai luống rau BẰNG NHAU!",
+                render: () => `
+                    <div class="w-full">
+                        <p class="text-xl font-bold text-emerald-900 mb-6">Hai luống rau có số lượng BẰNG NHAU</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div class="bg-lime-50 border-4 border-lime-400 p-4 rounded-3xl text-center shadow">
+                                <div class="text-5xl my-2">🥕 🥕 🥕</div>
+                                <p class="font-extrabold text-lime-800 text-xl">3 Củ cà rốt</p>
+                            </div>
+                            <div class="bg-lime-50 border-4 border-lime-400 p-4 rounded-3xl text-center shadow">
+                                <div class="text-5xl my-2">🥕 🥕 🥕</div>
+                                <p class="font-extrabold text-lime-800 text-xl">3 Củ cà rốt</p>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-600 text-white font-black text-xl py-2 rounded-2xl">
+                            3 = 3 (BẰNG NHAU)
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // --- ÂM THANH & NÓI ---
+        function speak(text) {
+            if (!soundEnabled) return;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'vi-VN';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-btn');
+            if (soundEnabled) {
+                btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                btn.classList.remove('bg-gray-400');
+                btn.classList.add('bg-emerald-600');
+            } else {
+                btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('bg-gray-400');
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            }
+        }
+
+        // --- CHUYỂN MÀN HÌNH ---
+        function hideAllScreens() {
+            document.getElementById('menu-screen').classList.add('hidden');
+            document.getElementById('lesson-screen').classList.add('hidden');
+            document.getElementById('game-menu-screen').classList.add('hidden');
+            document.getElementById('game-play-screen').classList.add('hidden');
+            document.getElementById('cert-screen').classList.add('hidden');
+        }
+
+        function showMainMenu() {
+            hideAllScreens();
+            document.getElementById('menu-screen').classList.remove('hidden');
+        }
+
+        function showLessonScreen() {
+            hideAllScreens();
+            document.getElementById('lesson-screen').classList.remove('hidden');
+            renderLesson();
+        }
+
+        function showGameMenuScreen() {
+            hideAllScreens();
+            document.getElementById('game-menu-screen').classList.remove('hidden');
+            if (completedGames.size >= 8) {
+                document.getElementById('cert-shortcut-btn').classList.remove('hidden');
+            }
+        }
+
+        // --- LOGIC PHẦN BÀI HỌC ---
+        function renderLesson() {
+            const lesson = lessons[currentLessonIndex];
+            document.getElementById('lesson-title').innerText = lesson.title;
+            document.getElementById('lesson-content').innerHTML = lesson.render();
+            
+            // Render dots
+            const dotsContainer = document.getElementById('lesson-dots');
+            dotsContainer.innerHTML = '';
+            lessons.forEach((_, idx) => {
+                const dot = document.createElement('div');
+                dot.className = `w-3 h-3 rounded-full ${idx === currentLessonIndex ? 'bg-emerald-600 w-6' : 'bg-gray-300'} transition-all`;
+                dotsContainer.appendChild(dot);
+            });
+
+            document.getElementById('prev-lesson-btn').disabled = currentLessonIndex === 0;
+            document.getElementById('next-lesson-btn').innerText = (currentLessonIndex === lessons.length - 1) ? "Xong bài học 🎯" : "Bài tiếp ➡";
+
+            speak(lesson.readText);
+        }
+
+        function changeLesson(dir) {
+            if (dir === 1 && currentLessonIndex === lessons.length - 1) {
+                showGameMenuScreen();
+                return;
+            }
+            currentLessonIndex += dir;
+            if (currentLessonIndex < 0) currentLessonIndex = 0;
+            if (currentLessonIndex >= lessons.length) currentLessonIndex = lessons.length - 1;
+            renderLesson();
+        }
+
+        function readLessonText() {
+            speak(lessons[currentLessonIndex].readText);
+        }
+
+        // --- TRÒ CHƠI ENGINE ---
+        function startGame(gameId) {
+            currentGameId = gameId;
+            hideAllScreens();
+            document.getElementById('game-play-screen').classList.remove('hidden');
+            document.getElementById('game-score').innerText = totalStars;
+            
+            resetCurrentGame();
+        }
+
+        function resetCurrentGame() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = '';
+            
+            switch(currentGameId) {
+                case 1: initGame1(); break;
+                case 2: initGame2(); break;
+                case 3: initGame3(); break;
+                case 4: initGame4(); break;
+                case 5: initGame5(); break;
+                case 6: initGame6(); break;
+                case 7: initGame7(); break;
+                case 8: initGame8(); break;
+            }
+        }
+
+        function speakInstruction() {
+            const text = document.getElementById('game-instruction').innerText;
+            speak(text);
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function handleRightAnswer() {
+            totalStars++;
+            document.getElementById('star-count').innerText = totalStars;
+            document.getElementById('game-score').innerText = totalStars;
+            completedGames.add(currentGameId);
+
+            const praises = ["Giỏi lắm!", "Con rất xuất sắc!", "Bé thu hoạch giỏi quá!", "Tuyệt vời quá!"];
+            const praise = praises[Math.floor(Math.random() * praises.length)];
+
+            document.getElementById('modal-title').innerText = "ĐÚNG RỒI! 🌿";
+            document.getElementById('modal-msg').innerText = praise;
+            document.getElementById('reward-modal').classList.remove('hidden');
+
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            speak(praise);
+
+            if (completedGames.size >= 8) {
+                document.getElementById('cert-shortcut-btn').classList.remove('hidden');
+            }
+        }
+
+        function handleWrongAnswer() {
+            speak("Chưa đúng rồi, bé thử đếm lại xem nào!");
+            const board = document.getElementById('game-board');
+            board.classList.add('animate-shake');
+            setTimeout(() => board.classList.remove('animate-shake'), 500);
+        }
+
+        function closeModal() {
+            document.getElementById('reward-modal').classList.add('hidden');
+            if (completedGames.size >= 8 && currentGameId === 8) {
+                showCertificate();
+            } else {
+                resetCurrentGame();
+            }
+        }
+
+        function nextGame() {
+            let nextId = currentGameId + 1;
+            if (nextId > 8) nextId = 1;
+            startGame(nextId);
+        }
+
+        // --- GAME 1: CHỌN NHÓM THỰC VẬT NHIỀU HƠN ---
+        function initGame1() {
+            document.getElementById('game-title').innerText = "Game 1: Vườn hoa quả nhiều hơn";
+            const plant = getRandomPlant();
+            const instruction = `Bé hãy bấm chọn nhóm có NHIỀU ${plant.name.toUpperCase()} hơn nhé!`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            let countA = getRandomInt(1, 4);
+            let countB = getRandomInt(1, 4);
+            while (countA === countB) countB = getRandomInt(1, 4);
+
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg">
+                    <button onclick="checkGame1(${countA}, ${countB})" class="bg-emerald-50 border-4 border-emerald-300 hover:border-emerald-500 rounded-3xl p-6 flex flex-col items-center gap-3 transition shadow-lg active:scale-95">
+                        <div class="text-4xl sm:text-5xl flex flex-wrap justify-center gap-2">
+                            ${(plant.icon + ' ').repeat(countA)}
+                        </div>
+                    </button>
+                    <button onclick="checkGame1(${countB}, ${countA})" class="bg-lime-50 border-4 border-lime-300 hover:border-lime-500 rounded-3xl p-6 flex flex-col items-center gap-3 transition shadow-lg active:scale-95">
+                        <div class="text-4xl sm:text-5xl flex flex-wrap justify-center gap-2">
+                            ${(plant.icon + ' ').repeat(countB)}
+                        </div>
+                    </button>
+                </div>
+            `;
+        }
+
+        function checkGame1(selected, other) {
+            if (selected > other) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 2: CHỌN NHÓM THỰC VẬT ÍT HƠN ---
+        function initGame2() {
+            document.getElementById('game-title').innerText = "Game 2: Luống cây ít hơn";
+            const plant = getRandomPlant();
+            const instruction = `Bé hãy bấm chọn nhóm có ÍT ${plant.name.toUpperCase()} hơn nhé!`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            let countA = getRandomInt(1, 4);
+            let countB = getRandomInt(1, 4);
+            while (countA === countB) countB = getRandomInt(1, 4);
+
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg">
+                    <button onclick="checkGame2(${countA}, ${countB})" class="bg-amber-50 border-4 border-amber-300 hover:border-amber-500 rounded-3xl p-6 flex flex-col items-center gap-3 transition shadow-lg active:scale-95">
+                        <div class="text-4xl sm:text-5xl flex flex-wrap justify-center gap-2">
+                            ${(plant.icon + ' ').repeat(countA)}
+                        </div>
+                    </button>
+                    <button onclick="checkGame2(${countB}, ${countA})" class="bg-purple-50 border-4 border-purple-300 hover:border-purple-500 rounded-3xl p-6 flex flex-col items-center gap-3 transition shadow-lg active:scale-95">
+                        <div class="text-4xl sm:text-5xl flex flex-wrap justify-center gap-2">
+                            ${(plant.icon + ' ').repeat(countB)}
+                        </div>
+                    </button>
+                </div>
+            `;
+        }
+
+        function checkGame2(selected, other) {
+            if (selected < other) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 3: CHỌN 2 LUỐNG CÂY BẰNG NHAU ---
+        function initGame3() {
+            document.getElementById('game-title').innerText = "Game 3: Hai vườn BẰNG NHAU";
+            const plant = getRandomPlant();
+            const instruction = `Bé hãy chọn cặp rỏ chứa số ${plant.name} BẰNG NHAU!`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            const options = [
+                { a: 3, b: 3, correct: true },
+                { a: 2, b: 4, correct: false },
+                { a: 1, b: 3, correct: false }
+            ];
+            options.sort(() => Math.random() - 0.5);
+
+            const board = document.getElementById('game-board');
+            let html = `<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">`;
+
+            options.forEach((opt) => {
+                html += `
+                    <button onclick="checkGame3(${opt.correct})" class="bg-emerald-50 border-4 border-emerald-300 hover:border-emerald-500 rounded-3xl p-4 flex flex-col justify-center items-center gap-2 transition shadow-lg active:scale-95">
+                        <div class="text-3xl border-b-2 border-emerald-200 pb-2 w-full text-center">${(plant.icon + ' ').repeat(opt.a)}</div>
+                        <div class="text-3xl pt-1 w-full text-center">${(plant.icon + ' ').repeat(opt.b)}</div>
+                    </button>
+                `;
+            });
+            html += `</div>`;
+            board.innerHTML = html;
+        }
+
+        function checkGame3(isCorrect) {
+            if (isCorrect) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 4: TRỒNG THÊM CÂY CHO BẰNG NHAU ---
+        let dragTargetCount = 3;
+        let dragCurrentCount = 0;
+        let game4Plant = { icon: '🌸', name: 'hoa đào' };
+
+        function initGame4() {
+            document.getElementById('game-title').innerText = "Game 4: Trồng cây bằng nhau";
+            dragTargetCount = getRandomInt(2, 4);
+            dragCurrentCount = getRandomInt(0, dragTargetCount - 1);
+            game4Plant = getRandomPlant();
+
+            const instruction = `Luống bên trái có ${dragTargetCount} ${game4Plant.name}. Bé hãy trồng thêm vào luống bên phải cho BẰNG NHAU nhé!`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            renderGame4();
+        }
+
+        function renderGame4() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="flex flex-col sm:flex-row items-center justify-around w-full gap-4">
+                    <!-- Luống Mẫu -->
+                    <div class="bg-emerald-50 border-4 border-emerald-300 rounded-3xl p-4 w-full sm:w-1/2 text-center shadow">
+                        <p class="font-extrabold text-emerald-800 mb-2">Luống cây mẫu (${dragTargetCount})</p>
+                        <div class="text-4xl min-h-[60px] flex items-center justify-center gap-1">
+                            ${(game4Plant.icon + ' ').repeat(dragTargetCount)}
+                        </div>
+                    </div>
+
+                    <!-- Luống Của Bé -->
+                    <div class="bg-amber-50 border-4 border-amber-300 rounded-3xl p-4 w-full sm:w-1/2 text-center shadow">
+                        <p class="font-extrabold text-amber-800 mb-2">Luống của bé (${dragCurrentCount})</p>
+                        <div class="text-4xl min-h-[60px] flex items-center justify-center gap-1 mb-2">
+                            ${dragCurrentCount === 0 ? '<span class="text-gray-400 text-sm">(Đang đất trống)</span>' : (game4Plant.icon + ' ').repeat(dragCurrentCount)}
+                        </div>
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="addGame4Item()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-4 py-2 rounded-xl text-lg shadow active:scale-95">
+                                🌱 Trồng 1
+                            </button>
+                            <button onclick="resetGame4Item()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-3 py-2 rounded-xl text-sm shadow active:scale-95">
+                                🔄 Làm lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="checkGame4()" class="mt-6 bg-amber-500 hover:bg-amber-600 text-white font-black text-lg px-8 py-3 rounded-2xl shadow-lg border-b-4 border-amber-700 active:scale-95">
+                    XÁC NHẬN BẰNG NHAU 🎯
+                </button>
+            `;
+        }
+
+        function addGame4Item() {
+            if (dragCurrentCount < 4) {
+                dragCurrentCount++;
+                renderGame4();
+            }
+        }
+
+        function resetGame4Item() {
+            dragCurrentCount = 0;
+            renderGame4();
+        }
+
+        function checkGame4() {
+            if (dragCurrentCount === dragTargetCount) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 5: HÁI THÊM HOẶC BỚT QUẢ TRONG RỎ ---
+        let g5Target = 3;
+        let g5Current = 1;
+        let g5Plant = { icon: '🍓', name: 'quả dâu' };
+
+        function initGame5() {
+            document.getElementById('game-title').innerText = "Game 5: Hái thêm hoặc bớt quả";
+            g5Target = getRandomInt(2, 4);
+            g5Current = getRandomInt(1, 4);
+            while (g5Current === g5Target) g5Current = getRandomInt(1, 4);
+            g5Plant = getRandomPlant();
+
+            const instruction = `Bé hãy chỉnh số ${g5Plant.name} trong rỏ BẰNG ${g5Target} bằng cách Thêm (+) hoặc Bớt (-)!`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            renderGame5();
+        }
+
+        function renderGame5() {
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="bg-lime-50 border-4 border-lime-400 rounded-3xl p-6 text-center max-w-md w-full shadow-lg">
+                    <p class="font-extrabold text-emerald-900 text-lg mb-2">Mục tiêu: Cần có ${g5Target} ${g5Plant.name}</p>
+                    <div class="text-5xl min-h-[70px] bg-white rounded-2xl p-4 border-2 border-lime-200 mb-4 flex items-center justify-center gap-2">
+                        ${(g5Plant.icon + ' ').repeat(g5Current)}
+                    </div>
+
+                    <div class="flex justify-center gap-4 mb-4">
+                        <button onclick="changeG5(1)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xl px-5 py-3 rounded-2xl shadow-md border-b-4 border-emerald-800 active:scale-95">
+                            ➕ Thêm 1
+                        </button>
+                        <button onclick="changeG5(-1)" class="bg-rose-500 hover:bg-rose-600 text-white font-black text-xl px-5 py-3 rounded-2xl shadow-md border-b-4 border-rose-700 active:scale-95">
+                            ➖ Bớt 1
+                        </button>
+                    </div>
+
+                    <button onclick="checkGame5()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-black text-lg py-3 rounded-2xl shadow-lg border-b-4 border-purple-800 active:scale-95">
+                        THU HOẠCH ✔️
+                    </button>
+                </div>
+            `;
+        }
+
+        function changeG5(val) {
+            g5Current += val;
+            if (g5Current < 0) g5Current = 0;
+            if (g5Current > 4) g5Current = 4;
+            renderGame5();
+        }
+
+        function checkGame5() {
+            if (g5Current === g5Target) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 6: ĐẾM RAU CỦ TRONG VƯỜN ---
+        function initGame6() {
+            document.getElementById('game-title').innerText = "Game 6: Đếm củ quả";
+            const targetNum = getRandomInt(1, 4);
+            const plant = getRandomPlant();
+
+            const instruction = `Bé hãy đếm xem có bao nhiêu ${plant.name} rồi chọn số đúng nhé!`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="flex flex-col items-center gap-6 w-full max-w-md">
+                    <div class="bg-emerald-50 border-4 border-emerald-300 rounded-3xl p-6 w-full text-center shadow">
+                        <div class="text-5xl flex flex-wrap justify-center gap-3">
+                            ${(plant.icon + ' ').repeat(targetNum)}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-3 w-full">
+                        ${[1, 2, 3, 4].map(num => `
+                            <button onclick="checkGame6(${num}, ${targetNum})" class="bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-black text-3xl py-4 rounded-2xl shadow-lg border-b-4 border-amber-800 active:scale-95">
+                                ${num}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkGame6(selected, target) {
+            if (selected === target) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 7: NỐI BIỂN KÝ HIỆU SO SÁNH ---
+        function initGame7() {
+            document.getElementById('game-title').innerText = "Game 7: Gắn biển so sánh";
+            const numA = getRandomInt(1, 4);
+            let numB = getRandomInt(1, 4);
+            const plant = getRandomPlant();
+
+            let correctRelation = "";
+            if (numA > numB) correctRelation = "NHIỀU HƠN";
+            else if (numA < numB) correctRelation = "ÍT HƠN";
+            else correctRelation = "BẰNG NHAU";
+
+            const instruction = `So sánh số lượng ${plant.name} giữa 2 luống đất:`;
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="flex flex-col items-center gap-6 w-full max-w-lg">
+                    <!-- 2 Luống Đất -->
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="bg-amber-100/60 border-4 border-amber-400 rounded-2xl p-4 text-center">
+                            <p class="text-xs font-bold text-amber-800 mb-1">Luống A</p>
+                            <div class="text-3xl">${(plant.icon + ' ').repeat(numA)}</div>
+                        </div>
+                        <div class="bg-amber-100/60 border-4 border-amber-400 rounded-2xl p-4 text-center">
+                            <p class="text-xs font-bold text-amber-800 mb-1">Luống B</p>
+                            <div class="text-3xl">${(plant.icon + ' ').repeat(numB)}</div>
+                        </div>
+                    </div>
+
+                    <!-- Nút Biển Hiệu -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+                        <button onclick="checkGame7('NHIỀU HƠN', '${correctRelation}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg py-3 rounded-2xl shadow border-b-4 border-emerald-800 active:scale-95">
+                            NHIỀU HƠN
+                        </button>
+                        <button onclick="checkGame7('ÍT HƠN', '${correctRelation}')" class="bg-rose-500 hover:bg-rose-600 text-white font-black text-lg py-3 rounded-2xl shadow border-b-4 border-rose-700 active:scale-95">
+                            ÍT HƠN
+                        </button>
+                        <button onclick="checkGame7('BẰNG NHAU', '${correctRelation}')" class="bg-purple-600 hover:bg-purple-700 text-white font-black text-lg py-3 rounded-2xl shadow border-b-4 border-purple-800 active:scale-95">
+                            BẰNG NHAU
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkGame7(selected, correct) {
+            if (selected === correct) handleRightAnswer();
+            else handleWrongAnswer();
+        }
+
+        // --- GAME 8: VÒNG QUAY MAY MẮN THỰC VẬT ---
+        function initGame8() {
+            document.getElementById('game-title').innerText = "Game 8: Vòng quay thực vật";
+            const instruction = "Bé hãy bấm QUAY để nhận thử thách thu hoạch ngẫu nhiên!";
+            document.getElementById('game-instruction').innerText = instruction;
+            speak(instruction);
+
+            const board = document.getElementById('game-board');
+            board.innerHTML = `
+                <div class="flex flex-col items-center gap-4">
+                    <div id="wheel" class="w-48 h-48 sm:w-64 sm:h-64 rounded-full border-8 border-yellow-400 bg-gradient-to-r from-emerald-400 via-lime-400 to-green-500 flex items-center justify-center text-white text-6xl font-black shadow-2xl transition-all duration-1000">
+                        🎡🌻
+                    </div>
+                    <button id="spin-btn" onclick="spinWheel()" class="bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white font-black text-2xl px-10 py-4 rounded-full shadow-xl border-b-4 border-amber-800 active:scale-95 pulse-btn">
+                        QUAY THU HOẠCH 🚀
+                    </button>
+                </div>
+            `;
+        }
+
+        function spinWheel() {
+            const wheel = document.getElementById('wheel');
+            const btn = document.getElementById('spin-btn');
+            btn.disabled = true;
+
+            const randomDeg = 1080 + Math.floor(Math.random() * 360);
+            wheel.style.transform = `rotate(${randomDeg}deg)`;
+
+            speak("Vòng quay khu vườn đang quay...");
+
+            setTimeout(() => {
+                const randomSubGame = getRandomInt(1, 7);
+                currentGameId = randomSubGame;
+                resetCurrentGame();
+            }, 1500);
+        }
+
+        // --- HIỂN THỊ GIẤY KHEN KHU VƯỜN ---
+        function showCertificate() {
+            hideAllScreens();
+            document.getElementById('cert-stars').innerText = `⭐ ${totalStars}`;
+            document.getElementById('cert-screen').classList.remove('hidden');
+
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.5 }
+            });
+
+            speak("Chúc mừng các con đã xuất sắc hoàn thành danh hiệu Bé giỏi so sánh trong phạm vi 4!");
+        }
+    </script>
+</body>
+</html>
